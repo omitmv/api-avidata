@@ -7,9 +7,9 @@ import com.avidata.api.domain.model.Plantel;
 
 public interface IPlantelRepository {
   Plantel save(Plantel plantel);
+  List<Plantel> findByNomeContaining(String nome);
+  List<Plantel> findAll();
   Optional<Plantel> findById(Long id);
   boolean existsById(Long id);
   void deleteById(Long id);
-  List<Plantel> findAll();
-  List<Plantel> findByNomeContaining(String nome);
 }

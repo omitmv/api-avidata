@@ -11,4 +11,6 @@ import com.avidata.api.infrastructure.adapter.out.persistence.entity.AvesEntity;
 public interface AvesJpaRepository extends JpaRepository<AvesEntity, Long> {
  List<AvesEntity> findByPlantelId(Long plantelId);
  List<AvesEntity> findByNomeContaining(String nome);
+ List<AvesEntity> findByEspecieId(Long especieId);
+ List<AvesEntity> findByNumeroAnilhaContaining(String numeroAnilha);
 }

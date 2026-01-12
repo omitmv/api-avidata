@@ -73,4 +73,22 @@ public class AvesRepositoryAdapter implements IAvesRepository {
         .map(mapper::toDomain)
         .toList();
   }
+
+  @Override
+  public List<Ave> findByEspecieId(Long especieId) {
+    log.info("[DEBUG] Buscando Aves por Especie ID: {}", especieId);
+    List<AvesEntity> entities = JpaRepository.findByEspecieId(especieId);
+    return entities.stream()
+        .map(mapper::toDomain)
+        .toList();
+  }
+
+  @Override
+  public List<Ave> findByNumeroAnilhaContaining(String numeroAnilha) {
+    log.info("[DEBUG] Buscando Aves por número de anilha contendo: {}", numeroAnilha);
+    List<AvesEntity> entities = JpaRepository.findByNumeroAnilhaContaining(numeroAnilha);
+    return entities.stream()
+        .map(mapper::toDomain)
+        .toList();
+  }
 }
