@@ -13,13 +13,9 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class Plantel {
   private Long id;
-  private String username;
-  private String password;
-  private String roles;
-  private String email;
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
-  private Boolean enabled;
+  private String nome;
+  private String descricao;
+  private LocalDateTime dataCadastro; 
 }
