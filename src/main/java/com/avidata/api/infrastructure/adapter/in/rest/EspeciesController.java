@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/v1/especie")
+@RequestMapping("/api/v1/especies")
 @RequiredArgsConstructor
 @Slf4j
 public class EspeciesController implements EspeciesSwagger {

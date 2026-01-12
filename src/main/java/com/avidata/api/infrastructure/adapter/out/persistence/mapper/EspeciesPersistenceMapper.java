@@ -23,6 +23,7 @@ public class EspeciesPersistenceMapper {
     }
 
     return EspeciesEntity.builder()
+        .id(especie.getId())
         .classe(especie.getClasse())
         .familia(especie.getFamilia())
         .genero(especie.getGenero())
@@ -43,6 +44,7 @@ public class EspeciesPersistenceMapper {
     }
 
     return Especie.builder()
+        .id(entity.getId())
         .classe(entity.getClasse())
         .familia(entity.getFamilia())
         .genero(entity.getGenero())
