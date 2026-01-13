@@ -53,10 +53,10 @@ docker run -p 8080:8080 `
 
 ```powershell
 # Variáveis
-$RESOURCE_GROUP = "avidata-rg"
-$LOCATION = "brazilsouth"
-$ACR_NAME = "avidataacr"
-$APP_NAME = "avidata-api"
+$RESOURCE_GROUP = "rg-avidata"
+$LOCATION = "eastus"
+$ACR_NAME = "acravidata"
+$APP_NAME = "api-avidata"
 
 # Login
 az login

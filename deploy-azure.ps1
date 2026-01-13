@@ -3,7 +3,7 @@
 
 # Configurações - AJUSTE CONFORME NECESSÁRIO
 $RESOURCE_GROUP = "gr-avidata"
-$LOCATION = "East US"
+$LOCATION = "eastus"
 $ACR_NAME = "acravidata"  # Deve ser único globalmente
 $APP_NAME = "api-avidata"
 $IMAGE_NAME = "avidata-api"
@@ -19,31 +19,37 @@ if (-not $account) {
     az login
 }
 
-# 2. Criar grupo de recursos
-Write-Host "`n[2/8] Criando grupo de recursos..." -ForegroundColor Yellow
+# 2. Registrar providers necessários
+Write-Host "`n[2/9] Registrando providers do Azure..." -ForegroundColor Yellow
+az provider register --namespace Microsoft.ContainerRegistry --wait
+az provider register --namespace Microsoft.App --wait
+az provider register --namespace Microsoft.OperationalInsights --wait
+Write-Host "Providers registrados com sucesso!" -ForegroundColor Green
+
+# 3. Criar grupo de recursos
+Write-Host "`n[3/9] Criando grupo de recursos..." -ForegroundColor Yellow
 az group create --name $RESOURCE_GROUP --location $LOCATION
 
-# 3. Criar Azure Container Registry
-Write-Host "`n[3/8] Criando Azure Container Registry..." -ForegroundColor Yellow
+# 4. Criar Azure Container Registry
+Write-Host "`n[4/9] Criando Azure Container Registry..." -ForegroundColor Yellow
 az acr create `
     --name $ACR_NAME `
     --resource-group $RESOURCE_GROUP `
     --sku Basic `
     --admin-enabled true
 
-# 4. Build da imagem localmente
-Write-Host "`n[4/8] Construindo imagem Docker..." -ForegroundColor Yellow
-docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+# 5. Build da imagem diretamente no Azure (sem Docker local)
+Write-Host "`n[5/8] Construindo imagem no Azure Container Registry..." -ForegroundColor Yellow
+Write-Host "Isso pode levar alguns minutos..." -ForegroundColor Cyan
+az acr build `
+    --registry $ACR_NAME `
+    --image ${IMAGE_NAME}:${IMAGE_TAG} `
+    --file Dockerfile `
+    .
 
-# 5. Login no ACR
-Write-Host "`n[5/8] Fazendo login no Container Registry..." -ForegroundColor Yellow
-az acr login --name $ACR_NAME
-
-# 6. Tag e Push da imagem
-Write-Host "`n[6/8] Enviando imagem para Azure..." -ForegroundColor Yellow
+# 6. Obter informações do ACR
+Write-Host "`n[6/8] Obtendo informações do Container Registry..." -ForegroundColor Yellow
 $ACR_LOGIN_SERVER = az acr show --name $ACR_NAME --query loginServer --output tsv
-docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}
-docker push ${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}
 
 # 7. Criar ambiente do Container Apps
 Write-Host "`n[7/8] Criando ambiente Container Apps..." -ForegroundColor Yellow

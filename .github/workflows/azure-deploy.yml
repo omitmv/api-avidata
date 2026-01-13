@@ -7,8 +7,8 @@ on:
 
 env:
   AZURE_RESOURCE_GROUP: avidata-rg
-  AZURE_CONTAINER_APP: avidata-api
-  AZURE_CONTAINER_REGISTRY: avidataacr
+  AZURE_CONTAINER_APP: api-avidata
+  AZURE_CONTAINER_REGISTRY: acravidata
   IMAGE_NAME: avidata-api
 
 jobs:

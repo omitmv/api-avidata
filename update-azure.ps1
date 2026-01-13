@@ -2,9 +2,9 @@
 # Execute este script no PowerShell para fazer novo deploy
 
 # Configurações - DEVEM SER AS MESMAS DO deploy-azure.ps1
-$RESOURCE_GROUP = "avidata-rg"
-$ACR_NAME = "avidataacr"
-$APP_NAME = "avidata-api"
+$RESOURCE_GROUP = "gr-avidata"
+$ACR_NAME = "acravidata"
+$APP_NAME = "api-avidata"
 $IMAGE_NAME = "avidata-api"
 $IMAGE_TAG = "v$(Get-Date -Format 'yyyyMMdd-HHmmss')"  # Tag com timestamp
 
