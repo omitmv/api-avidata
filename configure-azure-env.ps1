@@ -5,6 +5,7 @@ $APP_NAME = "api-avidata"
 Write-Host "Configurando variáveis de ambiente no Azure Container App..." -ForegroundColor Yellow
 
 $dbUrl = "jdbc:mysql://cerfc.com.br:3306/rafa2370_data_avidata?useSSL=false&serverTimezone=America/Sao_Paulo&allowPublicKeyRetrieval=true"
+$dbUsername = "rafa2370_data_avidata"
 $dbPassword = "QXZpRGF0YUAyMDI2"
 $jwtSecret = "q9m2X4p7T1uJ8sF0bC3rV9yQ6wN1eH5kL2tA7zP4xM8="
 
@@ -13,7 +14,7 @@ az containerapp update `
     --resource-group $RESOURCE_GROUP `
     --replace-env-vars `
         "AVIDATA_DB_URL=$dbUrl" `
-        "AVIDATA_DB_USERNAME=rafa2370_user_avidata" `
+        "AVIDATA_DB_USERNAME=$dbUsername" `
         "AVIDATA_DB_PASSWORD=$dbPassword" `
         "AVIDATA_JWT_SECRET=$jwtSecret"
 
