@@ -1,5 +1,5 @@
 # Multi-stage build para otimizar o tamanho da imagem
-FROM maven:3.9-eclipse-temurin-17 AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # Copiar apenas pom.xml primeiro para cache de dependências
@@ -11,7 +11,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Estágio final - imagem mais leve
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Criar usuário não-root para segurança
