@@ -6,7 +6,7 @@ on:
   workflow_dispatch:  # Permite execução manual
 
 env:
-  AZURE_RESOURCE_GROUP: avidata-rg
+  AZURE_RESOURCE_GROUP: gr-avidata
   AZURE_CONTAINER_APP: api-avidata
   AZURE_CONTAINER_REGISTRY: acravidata
   IMAGE_NAME: avidata-api
