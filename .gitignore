@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+### Azure ###
+azure-env-vars.json
