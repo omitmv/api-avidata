@@ -3,6 +3,7 @@
 
 # Configurações - DEVEM SER AS MESMAS DO deploy-azure.ps1
 $RESOURCE_GROUP = "gr-avidata"
+$LOCATION = "eastus"
 $ACR_NAME = "acravidata"
 $APP_NAME = "api-avidata"
 $IMAGE_NAME = "avidata-api"
@@ -17,6 +18,7 @@ Write-Host "=== Atualizando AviData API no Azure ===" -ForegroundColor Green
 
 # 1. Build e Push da nova imagem diretamente no Azure
 Write-Host "`n[1/3] Construindo e enviando nova versão para Azure..." -ForegroundColor Yellow
+Write-Host "Tag da imagem: $IMAGE_TAG" -ForegroundColor Cyan
 Write-Host "Isso pode levar alguns minutos..." -ForegroundColor Cyan
 
 az acr build `
@@ -24,22 +26,18 @@ az acr build `
     --image ${IMAGE_NAME}:${IMAGE_TAG} `
     --image ${IMAGE_NAME}:latest `
     --file Dockerfile `
-    --no-cache `
     .
 
 # 2. Atualizar Container App
 Write-Host "`n[2/3] Atualizando Container App..." -ForegroundColor Yellow
 $ACR_LOGIN_SERVER = az acr show --name $ACR_NAME --query loginServer --output tsv
 
-az containerapp update `
-    --name $APP_NAME `
-    --resource-group $RESOURCE_GROUP `
-    --image ${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG} `
-    --set-env-vars `
-        AVIDATA_DB_URL=${AVIDATA_DB_URL} `
-        AVIDATA_DB_USERNAME=${AVIDATA_DB_USERNAME} `
-        AVIDATA_DB_PASSWORD=${AVIDATA_DB_PASSWORD} `
-        AVIDATA_JWT_SECRET=${AVIDATA_JWT_SECRET}
+# Usar cmd.exe para evitar problemas com & no PowerShell
+$updateCommand = @"
+az containerapp update --name $APP_NAME --resource-group $RESOURCE_GROUP --image ${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG} --set-env-vars "AVIDATA_DB_URL=$AVIDATA_DB_URL" "AVIDATA_DB_USERNAME=$AVIDATA_DB_USERNAME" "AVIDATA_DB_PASSWORD=$AVIDATA_DB_PASSWORD" "AVIDATA_JWT_SECRET=$AVIDATA_JWT_SECRET"
+"@
+
+cmd /c $updateCommand
 
 # 3. Aguardar nova revisão e verificar
 Write-Host "`n[3/3] Verificando status da atualização..." -ForegroundColor Yellow

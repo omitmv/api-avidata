@@ -1,0 +1,18 @@
+[
+  {
+    "name": "AVIDATA_DB_URL",
+    "value": "jdbc:mysql://cerfc.com.br:3306/rafa2370_data_avidata?useSSL=false&serverTimezone=America/Sao_Paulo&allowPublicKeyRetrieval=true"
+  },
+  {
+    "name": "AVIDATA_DB_USERNAME",
+    "value": "rafa2370_user_avidata"
+  },
+  {
+    "name": "AVIDATA_DB_PASSWORD",
+    "value": "QXZpRGF0YUAyMDI2"
+  },
+  {
+    "name": "AVIDATA_JWT_SECRET",
+    "value": "q9m2X4p7T1uJ8sF0bC3rV9yQ6wN1eH5kL2tA7zP4xM8="
+  }
+]
