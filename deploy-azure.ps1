@@ -8,6 +8,10 @@ $ACR_NAME = "acravidata"  # Deve ser único globalmente
 $APP_NAME = "api-avidata"
 $IMAGE_NAME = "avidata-api"
 $IMAGE_TAG = "latest"
+$AVIDATA_DB_URL = "jdbc:mysql://cerfc.com.br:3306/rafa2370_data_avidata?useSSL=false&serverTimezone=America/Sao_Paulo&allowPublicKeyRetrieval=true"
+$AVIDATA_DB_USERNAME = "rafa2370_user_avidata"
+$AVIDATA_DB_PASSWORD = "QXZpRGF0YUAyMDI2"
+$AVIDATA_JWT_SECRET = "q9m2X4p7T1uJ8sF0bC3rV9yQ6wN1eH5kL2tA7zP4xM8="
 
 Write-Host "=== Deploy AviData API para Azure Container Apps ===" -ForegroundColor Green
 
@@ -76,7 +80,12 @@ az containerapp create `
     --cpu 0.5 `
     --memory 1.0Gi `
     --min-replicas 1 `
-    --max-replicas 3
+    --max-replicas 3 `
+    --env-vars `
+        AVIDATA_DB_URL=$AVIDATA_DB_URL `
+        AVIDATA_DB_USERNAME=$AVIDATA_DB_USERNAME `
+        AVIDATA_DB_PASSWORD=$AVIDATA_DB_PASSWORD `
+        AVIDATA_JWT_SECRET=$AVIDATA_JWT_SECRET
 
 # Obter URL da aplicação
 Write-Host "`n=== Deploy Concluído! ===" -ForegroundColor Green

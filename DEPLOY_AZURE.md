@@ -25,10 +25,10 @@ docker build -t avidata-api .
 
 # Executar localmente
 docker run -p 8080:8080 `
-  -e AZURE_DB_URL="jdbc:mysql://cerfc.com.br:3306/rafa2370_data_avidata?useSSL=false&serverTimezone=America/Sao_Paulo&allowPublicKeyRetrieval=true" `
-  -e AZURE_DB_USERNAME="rafa2370_user_avidata" `
-  -e AZURE_DB_PASSWORD="QXZpRGF0YUAyMDI2" `
-  -e AZURE_JWT_SECRET="q9m2X4p7T1uJ8sF0bC3rV9yQ6wN1eH5kL2tA7zP4xM8=" `
+  -e AVIDATA_DB_URL="jdbc:mysql://cerfc.com.br:3306/rafa2370_data_avidata?useSSL=false&serverTimezone=America/Sao_Paulo&allowPublicKeyRetrieval=true" `
+  -e AVIDATA_DB_USERNAME="rafa2370_user_avidata" `
+  -e AVIDATA_DB_PASSWORD="QXZpRGF0YUAyMDI2" `
+  -e AVIDATA_JWT_SECRET="q9m2X4p7T1uJ8sF0bC3rV9yQ6wN1eH5kL2tA7zP4xM8=" `
   avidata-api
 
 # Testar: http://localhost:8080/swagger-ui.html
@@ -111,10 +111,10 @@ az containerapp update `
   --name avidata-api `
   --resource-group avidata-rg `
   --set-env-vars `
-    AZURE_DB_URL="jdbc:mysql://seu-servidor.mysql.database.azure.com:3306/avidata?useSSL=true" `
-    AZURE_DB_USERNAME="seu-usuario@servidor" `
-    AZURE_DB_PASSWORD="sua-senha" `
-    AZURE_JWT_SECRET="seu-jwt-secret-seguro"
+    AVIDATA_DB_URL="jdbc:mysql://cerfc.com.br:3306/rafa2370_data_avidata?useSSL=false&serverTimezone=America/Sao_Paulo&allowPublicKeyRetrieval=true" `
+    AVIDATA_DB_USERNAME="rafa2370_user_avidata" `
+    AVIDATA_DB_PASSWORD="QXZpRGF0YUAyMDI2" `
+    AVIDATA_JWT_SECRET="q9m2X4p7T1uJ8sF0bC3rV9yQ6wN1eH5kL2tA7zP4xM8="
 ```
 
 Ou pelo portal Azure:
