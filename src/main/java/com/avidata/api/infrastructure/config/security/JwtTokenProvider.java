@@ -21,7 +21,7 @@ import java.util.Map;
 @Component
 public class JwtTokenProvider {
     
-    @Value("${AVIDATA_JWT_SECRET}")
+    @Value("${jwt.secret}")
     private String jwtSecret;
     
     @Value("${jwt.expiration}")
