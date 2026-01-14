@@ -56,6 +56,7 @@ jobs:
         
         az acr build \
           --registry ${{ env.AZURE_CONTAINER_REGISTRY }} \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
           --image ${{ env.IMAGE_NAME }}:$IMAGE_TAG \
           --image ${{ env.IMAGE_NAME }}:latest \
           --file Dockerfile \
