@@ -88,7 +88,7 @@ public class AuthController {
             
             Cookie cookie = new Cookie("jwt", token);
             cookie.setHttpOnly(true);
-            cookie.setSecure(false); // Defina como true em produção com HTTPS
+            cookie.setSecure(true); // Defina como true em produção com HTTPS
             cookie.setPath("/");
             cookie.setMaxAge(1 * 60 * 60); // 1h
 
@@ -107,4 +107,28 @@ public class AuthController {
                     .body("Username ou password inválidos");
         }
     }
+
+    @Operation(
+        summary = "Realizar logout",
+        description = "Encerra a sessão do usuário removendo o cookie JWT"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Logout realizado com sucesso"
+        )
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("jwt", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true); // Defina como true em produção com HTTPS
+        cookie.setPath("/");
+        cookie.setMaxAge(0); // remove
+
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok("Logout realizado");
+    }
+
 }
