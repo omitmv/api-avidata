@@ -22,12 +22,20 @@ public class AuthResponse {
     @Schema(description = "Tipo do token", example = "Bearer")
     private String type;
     
+    @Schema(description = "ID do usuário autenticado", example = "1")
+    private Long id;
+    
     @Schema(description = "Nome do usuário autenticado", example = "admin")
     private String username;
     
-    public AuthResponse(String token, String username) {
+    @Schema(description = "Email do usuário autenticado", example = "admin@example.com")
+    private String email;
+    
+    public AuthResponse(String token, Long id, String username, String email) {
         this.token = token;
         this.type = "Bearer";
+        this.id = id;
         this.username = username;
+        this.email = email;
     }
 }
