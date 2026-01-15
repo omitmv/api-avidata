@@ -33,3 +33,5 @@ build/
 .vscode/
 ### Azure ###
 azure-env-vars.json
+
+/CICD/
