@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.avidata.api.infrastructure.adapter.in.rest.dto.AuthResponse;
 import com.avidata.api.infrastructure.adapter.in.rest.dto.LoginRequest;
+import com.avidata.api.infrastructure.adapter.out.persistence.UserJpaRepository;
+import com.avidata.api.infrastructure.adapter.out.persistence.entity.UserEntity;
 import com.avidata.api.infrastructure.config.security.JwtTokenProvider;
 
 /**
@@ -37,6 +41,7 @@ public class AuthController {
     
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserJpaRepository userRepository;
     
     @Operation(
             summary = "Realizar login",
@@ -63,8 +68,9 @@ public class AuthController {
                     description = "Credenciais de login",
                     required = true
             )
-            @Valid @RequestBody LoginRequest loginRequest) {
-        log.info("Attempting login for user: {}", loginRequest.getUsername());
+            @Valid @RequestBody LoginRequest loginRequest,
+            HttpServletResponse response) {
+        log.info("[INFO] Tentando login para o usuário: {}", loginRequest.getUsername());
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -74,14 +80,31 @@ public class AuthController {
             );
             
             String token = jwtTokenProvider.generateToken(authentication.getName());
-            log.info("Generated token for user: {}", authentication.getName());
+            log.info("[INFO] Token gerado para o usuário: {}", authentication.getName());
             
-            return ResponseEntity.ok(new AuthResponse(token, authentication.getName()));
+            // Buscar dados completos do usuário
+            UserEntity user = userRepository.findByUsername(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado após autenticação"));
+            
+            Cookie cookie = new Cookie("jwt", token);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(false); // Defina como true em produção com HTTPS
+            cookie.setPath("/");
+            cookie.setMaxAge(1 * 60 * 60); // 1h
+
+            response.addCookie(cookie);
+            
+            return ResponseEntity.ok(new AuthResponse(
+                    token, 
+                    user.getId(), 
+                    user.getUsername(), 
+                    user.getEmail()
+            ));
             
         } catch (AuthenticationException e) {
-                log.error("Authentication failed for user: {}", loginRequest.getUsername());
+                log.error("[ERRO] Falha na autenticação para o usuário: {}", loginRequest.getUsername());
             return ResponseEntity.status(401)
-                    .body("Invalid username or password");
+                    .body("Username ou password inválidos");
         }
     }
 }
