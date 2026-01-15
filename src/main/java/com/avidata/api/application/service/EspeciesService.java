@@ -38,6 +38,12 @@ public class EspeciesService implements IEspeciesUseCase {
   }
 
   @Override
+  public List<Especie> listarTodos() {
+    log.info("[DEBUG] Listando todas as espécies");
+    return especiesRepository.findAll();
+  }
+
+  @Override
   public Optional<Especie> obterEspeciePorId(Long id) {
     log.info("[DEBUG] Obtendo especie por id: {}", id);
     return especiesRepository.findById(id);
