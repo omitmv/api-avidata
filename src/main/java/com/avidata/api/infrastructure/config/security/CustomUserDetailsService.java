@@ -31,7 +31,13 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         
         // Convert roles string to authorities
-        List<SimpleGrantedAuthority> authorities = Arrays.stream(userEntity.getRoles().split(","))
+        // Se roles for null ou vazio, usar role padrão USER
+        String rolesStr = userEntity.getRoles();
+        if (rolesStr == null || rolesStr.trim().isEmpty()) {
+            rolesStr = "USER";
+        }
+        
+        List<SimpleGrantedAuthority> authorities = Arrays.stream(rolesStr.split(","))
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.trim()))
                 .collect(Collectors.toList());
         
