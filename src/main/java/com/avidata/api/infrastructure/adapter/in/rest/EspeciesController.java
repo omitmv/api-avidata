@@ -49,6 +49,13 @@ public class EspeciesController implements EspeciesSwagger {
   }
 
   @Override
+  @GetMapping
+  public ResponseEntity<List<Especie>> listarTodasEspecies() {
+    log.info("[DEBUG] Listando todas as espécies");
+    return ResponseEntity.ok(especiesUseCase.listarTodos());
+  }
+
+  @Override
   @GetMapping("/id/{id}")
   public ResponseEntity<Especie> obterEspeciePorId(@PathVariable Long id) {
     log.info("[DEBUG] Obtendo espécie por id: {}", id);

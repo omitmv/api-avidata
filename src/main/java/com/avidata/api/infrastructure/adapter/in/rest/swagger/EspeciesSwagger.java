@@ -56,7 +56,19 @@ public interface EspeciesSwagger {
   })
   ResponseEntity<List<Especie>> listarEspeciesPorNomePopular(@PathVariable String nomePopular);
 
-  @Operation(
+	@Operation(
+		summary = "Listar todas as espécies",
+		description = "Recupera lista de todas as espécies existentes no sistema"
+	)
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "Espécies encontradas"
+		)
+	})
+	ResponseEntity<List<Especie>> listarTodasEspecies();
+
+	@Operation(
       summary = "Obter espécie por ID",
       description = "Recupera uma espécie existente pelo seu ID"
   )

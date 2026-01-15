@@ -8,6 +8,7 @@ import com.avidata.api.domain.model.Especie;
 public interface IEspeciesUseCase {
   Especie criarEspecie(Especie especie);
   List<Especie> listarEspecies(String nomePopular);
+  List<Especie> listarTodos();
   Optional<Especie> obterEspeciePorId(Long id);
   Especie atualizarEspecie(Long id, Especie especie);
   void deletarEspecie(Long id);
