@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,10 @@ import com.avidata.api.infrastructure.config.security.JwtTokenProvider;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(
+    origins = {"https://www.avidata.com.br", "http://localhost:3000", "https://black-tree-04b4acb0f.1.azurestaticapps.net"},
+    allowCredentials = "true"
+)
 public class AuthController implements AuthSwagger {
     
     private final AuthenticationManager authenticationManager;

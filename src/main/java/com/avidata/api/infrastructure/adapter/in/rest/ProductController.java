@@ -26,6 +26,10 @@ import java.util.List;
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(
+    origins = {"https://www.avidata.com.br", "http://localhost:3000", "https://black-tree-04b4acb0f.1.azurestaticapps.net"},
+    allowCredentials = "true"
+)
 public class ProductController implements ProductSwagger {
     
     private final ProductUseCase productUseCase;
