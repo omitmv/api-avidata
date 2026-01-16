@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      AVIDATA_DB_URL: ${{ secrets.AVIDATA_DB_URL }}
       AVIDATA_DB_USERNAME: ${{ secrets.AVIDATA_DB_USERNAME }}
       AVIDATA_DB_PASSWORD: ${{ secrets.AVIDATA_DB_PASSWORD }}
       AVIDATA_JWT_SECRET: ${{ secrets.AVIDATA_JWT_SECRET }}
@@ -72,6 +73,7 @@ jobs:
           --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
           --image $ACR_LOGIN_SERVER/${{ env.IMAGE_NAME }}:$IMAGE_TAG \
           --set-env-vars \
+            "AVIDATA_DB_URL=${{ env.AVIDATA_DB_URL }}" \
             "AVIDATA_DB_USERNAME=${{ env.AVIDATA_DB_USERNAME }}" \
             "AVIDATA_DB_PASSWORD=${{ env.AVIDATA_DB_PASSWORD }}" \
             "AVIDATA_JWT_SECRET=${{ env.AVIDATA_JWT_SECRET }}"
