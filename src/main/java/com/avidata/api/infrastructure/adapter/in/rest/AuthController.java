@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.avidata.api.application.service.UsuarioService;
 import com.avidata.api.infrastructure.adapter.in.rest.dto.AuthResponse;
 import com.avidata.api.infrastructure.adapter.in.rest.dto.LoginRequest;
 import com.avidata.api.infrastructure.adapter.in.rest.swagger.AuthSwagger;
@@ -38,6 +39,7 @@ public class AuthController implements AuthSwagger {
 	private final AuthenticationManager authenticationManager;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserJpaRepository userRepository;
+	private final UsuarioService usuarioService;
 
 	@Override
 	@PostMapping("/login")
@@ -53,7 +55,7 @@ public class AuthController implements AuthSwagger {
 				log.error("[ERRO] Username ou password em branco");
 				return ResponseEntity.badRequest().body("Username e password não podem ser em branco");
 			}
-			if (userRepository.existsByUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword()) == false) {
+			if (usuarioService.validarUsernameAndPassword(loginRequest.getUsername(),  loginRequest.getPassword()) == false) {
 				log.error("[ERRO] Credenciais inválidas para o usuário: {}", loginRequest.getUsername());
 				return ResponseEntity.status(401).body("Username ou password inválidos");
 			}
