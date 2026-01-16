@@ -72,4 +72,10 @@ public class UsuarioRepositoryAdapter implements IUsuarioRepository {
       .map(mapper::toDomain)
       .toList();
   }
+
+  @Override
+  public boolean existsByUsernameAndPassword(String username, String password) {
+    log.info("[DEBUG] Encontrando usuario por username: {} e password: {}", username, password);
+    return jpaRepository.existsByUsernameAndPassword(username, password);
+  }
 }

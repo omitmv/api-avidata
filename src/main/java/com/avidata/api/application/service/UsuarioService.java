@@ -71,4 +71,17 @@ public class UsuarioService implements IUsuarioUseCase {
     }
     usuarioRepository.deleteByUsername(username);
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Boolean validarUsernameAndPassword(String username, String password) {
+    log.info("[DEBUG] Validando usuario: {}", username);
+    return usuarioRepository.findByUsername(username)
+            .map(usuario -> {
+              boolean matches = passwordEncoder.matches(password, usuario.getPassword());
+              log.info("[DEBUG] Senha válida para usuario {}: {}", username, matches);
+              return matches;
+            })
+            .orElse(false);
+  }
 }

@@ -11,4 +11,5 @@ public interface IUsuarioUseCase {
   List<Usuario> listarUsuarios(String username);
   Usuario atualizarUsuario(String username, Usuario usuario);
   void deletarUsuario(String username);
+  Boolean validarUsernameAndPassword(String username, String password);
 }

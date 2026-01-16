@@ -46,6 +46,17 @@ public class AuthController implements AuthSwagger {
 			HttpServletResponse response) {
 		log.info("[INFO] Tentando login para o usuário: {}", loginRequest.getUsername());
 		try {
+			if (loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
+				log.error("[ERRO] Username ou password nulos");
+				return ResponseEntity.badRequest().body("Username e password são obrigatórios");
+			} else if (loginRequest.getUsername().isBlank() || loginRequest.getPassword().isBlank()) {
+				log.error("[ERRO] Username ou password em branco");
+				return ResponseEntity.badRequest().body("Username e password não podem ser em branco");
+			}
+			if (userRepository.existsByUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword()) == false) {
+				log.error("[ERRO] Credenciais inválidas para o usuário: {}", loginRequest.getUsername());
+				return ResponseEntity.status(401).body("Username ou password inválidos");
+			}
 			Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(
 							loginRequest.getUsername(),

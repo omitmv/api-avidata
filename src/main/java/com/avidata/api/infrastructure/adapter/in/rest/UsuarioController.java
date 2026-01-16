@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.avidata.api.application.service.UsuarioService;
 import com.avidata.api.domain.model.Usuario;
 import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioRequest;
+import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioValidacaoRequest;
 import com.avidata.api.infrastructure.adapter.in.rest.mapper.UsuarioRestMapper;
 import com.avidata.api.infrastructure.adapter.in.rest.swagger.UsuarioSwagger;
 
@@ -88,5 +89,12 @@ public class UsuarioController implements UsuarioSwagger {
     return usuarioService.buscarPorUsername(login)
       .map(ResponseEntity::ok)
       .orElse(ResponseEntity.notFound().build());
+  }
+
+  @Override
+  @PostMapping("/validate")
+  public ResponseEntity<Boolean> validateUsuario(@Valid @RequestBody UsuarioValidacaoRequest request) {
+    log.info("[DEBUG] Validando usuario com dados: {}", request);
+    return ResponseEntity.ok(usuarioService.validarUsernameAndPassword(request.getUsername(), request.getPassword()));
   }
 }

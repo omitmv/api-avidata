@@ -13,4 +13,5 @@ public interface IUsuarioRepository {
   void deleteByUsername(String username);
   Usuario update(String username, Usuario usuario);
   boolean existsByUsername(String username);
+  boolean existsByUsernameAndPassword(String username, String password);
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.avidata.api.domain.model.Usuario;
 import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioRequest;
+import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioValidacaoRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -120,5 +121,22 @@ public interface UsuarioSwagger {
   ResponseEntity<Usuario> getUsuarioByLogin(
     @Parameter(description = "Login do usuário", required = true)
     @PathVariable String login
+  );
+
+  @Operation(
+    summary = "Validar usuário e senha",
+    description = "Valida as credenciais do usuário fornecidas"
+  )
+  @ApiResponses(value = {
+    @ApiResponse(
+      responseCode = "200",
+      description = "Credenciais válidas"
+    ),
+    @ApiResponse(
+      responseCode = "401",
+      description = "Credenciais inválidas"
+    )
+  })
+  ResponseEntity<Boolean> validateUsuario(@org.springframework.web.bind.annotation.RequestBody UsuarioValidacaoRequest request
   );
 }
