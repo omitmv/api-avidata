@@ -45,6 +45,7 @@ public class EspeciesController implements EspeciesSwagger {
   @Override
   @GetMapping("/nomePopular/{nomePopular}")
   public ResponseEntity<List<Especie>> listarEspeciesPorNomePopular(@PathVariable String nomePopular) {
+    log.info("[DEBUG] Listando espécies com nome popular: {}", nomePopular);
     return ResponseEntity.ok(especiesUseCase.listarEspecies(nomePopular));
   }
 
