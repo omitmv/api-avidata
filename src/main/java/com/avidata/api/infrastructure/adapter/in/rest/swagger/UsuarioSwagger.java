@@ -102,4 +102,23 @@ public interface UsuarioSwagger {
     @Parameter(description = "Login do usuario", required = true)
     @PathVariable String login
   );
+
+  @Operation(
+    summary = "Recuperar usuário pelo login",
+    description = "Recupera os detalhes de um usuário específico com base no login fornecido"
+  )
+  @ApiResponses(value = {
+    @ApiResponse(
+      responseCode = "200",
+      description = "Usuário recuperado com sucesso"
+    ),
+    @ApiResponse(
+      responseCode = "404",
+      description = "Usuário não encontrado"
+    )
+  })
+  ResponseEntity<Usuario> getUsuarioByLogin(
+    @Parameter(description = "Login do usuário", required = true)
+    @PathVariable String login
+  );
 }

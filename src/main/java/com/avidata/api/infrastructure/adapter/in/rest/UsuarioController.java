@@ -78,4 +78,15 @@ public class UsuarioController implements UsuarioSwagger {
     List<Usuario> usuarios = usuarioService.listarUsuarios(login);
     return ResponseEntity.ok(usuarios);
   }
+
+  @Override
+  @GetMapping("/detail/{login}")
+  public ResponseEntity<Usuario> getUsuarioByLogin(
+    @PathVariable String login
+  ) {
+    log.info("[DEBUG] Obtendo usuario com login: {}", login);
+    return usuarioService.buscarPorUsername(login)
+      .map(ResponseEntity::ok)
+      .orElse(ResponseEntity.notFound().build());
+  }
 }
