@@ -1,11 +1,5 @@
 package com.avidata.api.infrastructure.adapter.in.rest;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -24,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.avidata.api.infrastructure.adapter.in.rest.dto.AuthResponse;
 import com.avidata.api.infrastructure.adapter.in.rest.dto.LoginRequest;
+import com.avidata.api.infrastructure.adapter.in.rest.swagger.AuthSwagger;
 import com.avidata.api.infrastructure.adapter.out.persistence.UserJpaRepository;
 import com.avidata.api.infrastructure.adapter.out.persistence.entity.UserEntity;
 import com.avidata.api.infrastructure.config.security.JwtTokenProvider;
@@ -35,33 +30,14 @@ import com.avidata.api.infrastructure.config.security.JwtTokenProvider;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authentication", description = "API de autenticação e geração de tokens JWT")
 @Slf4j
-public class AuthController {
+public class AuthController implements AuthSwagger {
     
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserJpaRepository userRepository;
     
-    @Operation(
-            summary = "Realizar login",
-            description = "Autentica o usuário e retorna um token JWT válido para acesso aos endpoints protegidos"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Login realizado com sucesso",
-                    content = @Content(schema = @Schema(implementation = AuthResponse.class))
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Credenciais inválidas"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Dados inválidos fornecidos"
-            )
-    })
+    @Override
     @PostMapping("/login")
     public ResponseEntity<?> login(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -108,16 +84,7 @@ public class AuthController {
         }
     }
 
-    @Operation(
-        summary = "Realizar logout",
-        description = "Encerra a sessão do usuário removendo o cookie JWT"
-    )
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Logout realizado com sucesso"
-        )
-    })
+    @Override
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("jwt", null);
@@ -130,5 +97,4 @@ public class AuthController {
 
         return ResponseEntity.ok("Logout realizado");
     }
-
 }
