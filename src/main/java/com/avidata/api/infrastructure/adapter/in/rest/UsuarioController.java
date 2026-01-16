@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.avidata.api.application.service.UsuarioService;
 import com.avidata.api.domain.model.Usuario;
 import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioRequest;
+import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioResponse;
 import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioValidacaoRequest;
 import com.avidata.api.infrastructure.adapter.in.rest.mapper.UsuarioRestMapper;
 import com.avidata.api.infrastructure.adapter.in.rest.swagger.UsuarioSwagger;
@@ -82,12 +83,12 @@ public class UsuarioController implements UsuarioSwagger {
 
   @Override
   @GetMapping("/detail/{login}")
-  public ResponseEntity<Usuario> getUsuarioByLogin(
+  public ResponseEntity<UsuarioResponse> getUsuarioByLogin(
     @PathVariable String login
   ) {
     log.info("[DEBUG] Obtendo usuario com login: {}", login);
     return usuarioService.buscarPorUsername(login)
-      .map(ResponseEntity::ok)
+      .map(usuario -> ResponseEntity.ok(new UsuarioRestMapper().toResponse(usuario)))
       .orElse(ResponseEntity.notFound().build());
   }
 

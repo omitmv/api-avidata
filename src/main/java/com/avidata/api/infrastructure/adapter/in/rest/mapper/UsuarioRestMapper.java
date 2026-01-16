@@ -2,6 +2,7 @@ package com.avidata.api.infrastructure.adapter.in.rest.mapper;
 
 import com.avidata.api.domain.model.Usuario;
 import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioRequest;
+import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioResponse;
 
 public class UsuarioRestMapper {
   
@@ -15,4 +16,15 @@ public class UsuarioRestMapper {
         .build();
   }
   
+  public UsuarioResponse toResponse(Usuario usuario) {
+    return UsuarioResponse.builder()
+        .id(usuario.getId())
+        .username(usuario.getUsername())
+        .email(usuario.getEmail())
+        .createdAt(usuario.getCreatedAt())
+        .updatedAt(usuario.getUpdatedAt())
+        .enabled(usuario.getEnabled())
+        .roles(usuario.getRoles())
+        .build();
+  }
 }

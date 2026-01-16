@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.avidata.api.domain.model.Usuario;
 import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioRequest;
+import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioResponse;
 import com.avidata.api.infrastructure.adapter.in.rest.dto.UsuarioValidacaoRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -118,7 +119,7 @@ public interface UsuarioSwagger {
       description = "Usuário não encontrado"
     )
   })
-  ResponseEntity<Usuario> getUsuarioByLogin(
+  ResponseEntity<UsuarioResponse> getUsuarioByLogin(
     @Parameter(description = "Login do usuário", required = true)
     @PathVariable String login
   );
