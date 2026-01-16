@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/v1/especies")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(
-    origins = {"https://www.avidata.com.br", "http://localhost:3000", "https://black-tree-04b4acb0f.1.azurestaticapps.net"},
-    allowCredentials = "true"
-)
 public class EspeciesController implements EspeciesSwagger {
   private final IEspeciesUseCase especiesUseCase;
   private final EspeciesRestMapper mapper;
