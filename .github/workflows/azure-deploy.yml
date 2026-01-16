@@ -71,7 +71,6 @@ jobs:
         az containerapp update \
           --name ${{ env.AZURE_CONTAINER_APP }} \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          --ingress external \
           --image $ACR_LOGIN_SERVER/${{ env.IMAGE_NAME }}:$IMAGE_TAG \
           --set-env-vars \
             "AVIDATA_DB_URL=${{ env.AVIDATA_DB_URL }}" \
