@@ -73,4 +73,12 @@ public class PlantelController implements PlantelSwagger {
     plantelUseCase.deletarPlantel(id);
     return ResponseEntity.noContent().build();
   }
+
+  @Override
+  @GetMapping
+  public ResponseEntity<List<Plantel>> listarTodosPlantels() {
+    log.info("[DEBUG] Listando todos os plantéis");
+    List<Plantel> plantels = plantelUseCase.listarTodosPlantels();
+    return ResponseEntity.ok(plantels);
+  }
 }

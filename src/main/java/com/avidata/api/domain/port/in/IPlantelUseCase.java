@@ -11,4 +11,5 @@ public interface IPlantelUseCase {
   Optional<Plantel> obterPlantelPorId(Long id);
   Plantel atualizarPlantel(Long id, Plantel plantel);
   void deletarPlantel(Long id);
+  List<Plantel> listarTodosPlantels();
 }

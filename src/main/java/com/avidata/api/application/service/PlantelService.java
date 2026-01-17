@@ -70,4 +70,9 @@ public class PlantelService implements IPlantelUseCase {
         }
         plantelRepository.deleteById(id);
     }
+
+    @Override
+    public List<Plantel> listarTodosPlantels() {
+        return plantelRepository.findAll();
+    }
 }
