@@ -20,5 +20,6 @@ public class PlantelEntity {
   private Long id;
   private String nome;
   private String descricao;
+  @Column(name = "data_cadastro")
   private LocalDateTime dataCadastro;
 }

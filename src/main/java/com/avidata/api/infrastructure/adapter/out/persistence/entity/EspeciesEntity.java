@@ -20,5 +20,6 @@ public class EspeciesEntity {
   private String familia;
   private String genero;
   private String especie;
+  @Column(name = "nome_popular")
   private String nomePopular;
 }
