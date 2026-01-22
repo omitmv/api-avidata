@@ -1,5 +1,8 @@
 package com.avidata.api.infrastructure.adapter.in.rest.dto;
 
+import com.avidata.api.domain.model.StatusAve;
+import com.avidata.api.domain.model.TipoAnilha;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,10 +21,10 @@ public class AveRequest {
     private String sexo; // M, F, Indefinido
     private String cor;
     private String numeroAnilha;
-    private String anilhaTipo; // SISPASS, FOB, Outros
+    private TipoAnilha tipoAnilha; // SISPASS, FOB, Outros
     private Integer anoAnilha;
     private Long paiId;
     private Long maeId;
     private Long plantelId;
-    private String status; // Ativo, Vendido, Morto, Emprestado, Perdido
+    private StatusAve statusAve; // Ativo, Vendido, Morto, Emprestado, Perdido
 }

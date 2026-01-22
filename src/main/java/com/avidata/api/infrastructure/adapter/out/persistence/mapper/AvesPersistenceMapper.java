@@ -21,6 +21,8 @@ public class AvesPersistenceMapper {
         .anoAnilha(ave.getAnoAnilha())
         .pai(ave.getPai() != null ? toEntity(ave.getPai()) : null)
         .mae(ave.getMae() != null ? toEntity(ave.getMae()) : null)
+        .statusAve(new StatusAvePersistenceMapper().toEntity(ave.getStatusAve()))
+        .tipoAnilha(new TipoAnilhaPersistenceMapper().toEntity(ave.getTipoAnilha()))
         .build();
   }
 
@@ -38,6 +40,8 @@ public class AvesPersistenceMapper {
         .anoAnilha(entity.getAnoAnilha())
         .pai(entity.getPai() != null ? toDomain(entity.getPai()) : null)
         .mae(entity.getMae() != null ? toDomain(entity.getMae()) : null)
+        .statusAve(new StatusAvePersistenceMapper().toDomain(entity.getStatusAve()))
+        .tipoAnilha(new TipoAnilhaPersistenceMapper().toDomain(entity.getTipoAnilha()))
         .build();
   }
 }

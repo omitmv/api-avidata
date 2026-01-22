@@ -1,5 +1,8 @@
 package com.avidata.api.infrastructure.adapter.in.rest.dto;
 
+import com.avidata.api.domain.model.StatusAve;
+import com.avidata.api.domain.model.TipoAnilha;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +23,7 @@ public class AveResponse {
     private String sexo;
     private String cor;
     private String numeroAnilha;
-    private String anilhaTipo;
+    private TipoAnilha tipoAnilha;
     private Integer anoAnilha;
     private Long paiId;
     private String paiNome;
@@ -28,5 +31,5 @@ public class AveResponse {
     private String maeNome;
     private Long plantelId;
     private String plantelNome;
-    private String status;
+    private StatusAve statusAve;
 }

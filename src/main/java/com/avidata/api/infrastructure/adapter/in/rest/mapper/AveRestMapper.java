@@ -29,9 +29,9 @@ public class AveRestMapper {
                 .sexo(request.getSexo())
                 .cor(request.getCor())
                 .numeroAnilha(request.getNumeroAnilha())
-                .anilhaTipo(request.getAnilhaTipo())
+                .tipoAnilha(request.getTipoAnilha())
                 .anoAnilha(request.getAnoAnilha())
-                .status(request.getStatus())
+                .statusAve(request.getStatusAve())
                 .build();
         
         // Set relationships with IDs only
@@ -66,9 +66,9 @@ public class AveRestMapper {
                 .sexo(ave.getSexo())
                 .cor(ave.getCor())
                 .numeroAnilha(ave.getNumeroAnilha())
-                .anilhaTipo(ave.getAnilhaTipo())
+                .tipoAnilha(ave.getTipoAnilha())
                 .anoAnilha(ave.getAnoAnilha())
-                .status(ave.getStatus())
+                .statusAve(ave.getStatusAve())
                 .build();
         
         // Extract IDs and names from relationships

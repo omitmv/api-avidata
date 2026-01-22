@@ -75,9 +75,9 @@ public class AveService implements IAveUseCase {
                     aveExistente.setSexo(ave.getSexo());
                     aveExistente.setCor(ave.getCor());
                     aveExistente.setNumeroAnilha(ave.getNumeroAnilha());
-                    aveExistente.setAnilhaTipo(ave.getAnilhaTipo());
+                    aveExistente.setTipoAnilha(ave.getTipoAnilha());
                     aveExistente.setAnoAnilha(ave.getAnoAnilha());
-                    aveExistente.setStatus(ave.getStatus());
+                    aveExistente.setStatusAve(ave.getStatusAve());
                     aveExistente.setEspecie(ave.getEspecie());
                     aveExistente.setPlantel(ave.getPlantel());
                     aveExistente.setPai(ave.getPai());

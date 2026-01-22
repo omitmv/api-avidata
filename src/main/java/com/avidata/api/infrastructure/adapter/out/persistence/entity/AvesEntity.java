@@ -3,8 +3,6 @@ package com.avidata.api.infrastructure.adapter.out.persistence.entity;
 import java.time.LocalDateTime;
 
 import com.avidata.api.domain.enumerador.SexoEnum;
-import com.avidata.api.domain.enumerador.StatusEnum;
-import com.avidata.api.domain.enumerador.TipoAnilhaEnum;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,12 +31,15 @@ public class AvesEntity {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private SexoEnum sexo = SexoEnum.INDEFINIDO;
+  @Column(name = "data_nascimento")
   private LocalDateTime dataNascimento;
   private String cor;
+  @Column(name = "numero_anilha")
   private String numeroAnilha;
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = true)
-  private TipoAnilhaEnum anilhaTipo;
+  @ManyToOne
+  @JoinColumn(name = "tipo_anilha_id")
+  private TipoAnilhaEntity tipoAnilha;
+  @Column(name = "ano_anilha")
   private Integer anoAnilha;
   @ManyToOne
   @JoinColumn(name = "pai_id")
@@ -46,10 +47,12 @@ public class AvesEntity {
   @ManyToOne
   @JoinColumn(name = "mae_id")
   private AvesEntity mae;
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private StatusEnum status = StatusEnum.ATIVO;
+  @ManyToOne
+  @JoinColumn(name = "status_id")
+  private StatusAveEntity statusAve;
+  @Column(name = "data_entrada")
   private LocalDateTime dataEntrada;
+  @Column(name = "data_saida")
   private LocalDateTime dataSaida;
   private String observacoes;
 }

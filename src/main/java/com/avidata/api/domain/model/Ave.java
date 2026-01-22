@@ -19,9 +19,9 @@ public class Ave {
   private Plantel plantel;
   private String identificador;
   private String numeroAnilha;
-  private String anilhaTipo;
+  private TipoAnilha tipoAnilha;
   private Integer anoAnilha;
-  private String status;
+  private StatusAve statusAve;
   private String cor;
   private Ave pai;
   private Ave mae;
