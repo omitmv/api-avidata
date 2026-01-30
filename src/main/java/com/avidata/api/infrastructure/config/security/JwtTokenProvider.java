@@ -90,6 +90,7 @@ public class JwtTokenProvider {
     
     /**
      * Validate JWT token
+     * @throws ExpiredJwtException if token is expired
      */
     public boolean validateToken(String token) {
         try {
@@ -98,6 +99,21 @@ public class JwtTokenProvider {
                     .build()
                     .parseSignedClaims(token);
             return !isTokenExpired(token);
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            log.error("JWT token expired: {}", e.getMessage());
+            throw e; // Re-throw to be caught in filter
+        } catch (io.jsonwebtoken.security.SecurityException e) {
+            log.error("Invalid JWT signature: {}", e.getMessage());
+            return false;
+        } catch (io.jsonwebtoken.MalformedJwtException e) {
+            log.error("Invalid JWT token format: {}", e.getMessage());
+            return false;
+        } catch (io.jsonwebtoken.UnsupportedJwtException e) {
+            log.error("Unsupported JWT token: {}", e.getMessage());
+            return false;
+        } catch (IllegalArgumentException e) {
+            log.error("JWT claims string is empty: {}", e.getMessage());
+            return false;
         } catch (Exception e) {
             log.error("Invalid JWT token: {}", e.getMessage());
             return false;

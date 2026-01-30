@@ -1,5 +1,10 @@
 package com.avidata.api.infrastructure.adapter.in.rest.dto;
 
+import java.time.LocalDateTime;
+
+import com.avidata.api.domain.model.Ave;
+import com.avidata.api.domain.model.Especie;
+import com.avidata.api.domain.model.Plantel;
 import com.avidata.api.domain.model.StatusAve;
 import com.avidata.api.domain.model.TipoAnilha;
 
@@ -18,18 +23,18 @@ public class AveResponse {
     private Long id;
     private String identificador;
     private String nome;
-    private Long especieId;
-    private String especieNome;
+    private Especie especie;
     private String sexo;
     private String cor;
     private String numeroAnilha;
     private TipoAnilha tipoAnilha;
     private Integer anoAnilha;
-    private Long paiId;
-    private String paiNome;
-    private Long maeId;
-    private String maeNome;
-    private Long plantelId;
-    private String plantelNome;
+    private Ave pai;
+    private Ave mae;
+    private Plantel plantel;
     private StatusAve statusAve;
+    private LocalDateTime dataNascimento;
+    private LocalDateTime dataEntrada;
+    private LocalDateTime dataSaida;
+    private String observacoes;
 }

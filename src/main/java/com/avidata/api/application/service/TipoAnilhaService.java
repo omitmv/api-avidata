@@ -30,7 +30,6 @@ public class TipoAnilhaService implements ITipoAnilhaUseCase {
     log.info("[DEBUG] Atualizando tipo de anilha com id: {}", id);
     return tipoAnilhaRepository.findById(id)
         .map(existingTipoAnilha -> {
-          existingTipoAnilha.setId(tipoAnilha.getId());
           existingTipoAnilha.setTipoAnilha(tipoAnilha.getTipoAnilha());
           existingTipoAnilha.setFlTipoAnilha(tipoAnilha.getFlTipoAnilha());
           existingTipoAnilha.setDescricao(tipoAnilha.getDescricao());

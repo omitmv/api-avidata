@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +17,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.jsonwebtoken.ExpiredJwtException;
+
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * JWT Authentication Filter
@@ -40,31 +48,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
         
-        try {
-            String token = null;
-            if (request.getCookies() != null) {
-                for (Cookie cookie : request.getCookies()) {
-                    if (cookie.getName().equals("jwt")) {
-                        token = cookie.getValue();
-                    }
-                }
-            }
-            if (token != null) {
-                String username = jwtTokenProvider.extractUsername(token);
-                UserDetails user = userDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            }
-        } catch (Exception ex) {
-            log.error("Usuário não autenticado", ex);
+        // Skip JWT validation for public endpoints
+        String requestPath = request.getRequestURI();
+        if (isPublicEndpoint(requestPath)) {
+            log.debug("Skipping JWT validation for public endpoint: {}", requestPath);
+            filterChain.doFilter(request, response);
+            return;
         }
-        filterChain.doFilter(request, response);
-            /*
+        
+        try {
             String jwt = extractJwtFromRequest(request);
             
-            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
-                String username = jwtTokenProvider.extractUsername(jwt);
+            if (StringUtils.hasText(jwt)) {
+                // Validate token first
+                if (!jwtTokenProvider.validateToken(jwt)) {
+                    log.warn("Invalid or expired JWT token");
+                    sendErrorResponse(response, "Acesso bloqueado: Token inválido ou expirado", HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
                 
+                // Extract username and authenticate
+                String username = jwtTokenProvider.extractUsername(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 
                 UsernamePasswordAuthenticationToken authentication =
@@ -74,28 +78,67 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 userDetails.getAuthorities()
                         );
                 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                
-                log.debug("Set authentication for user: {}", username);
+                log.debug("Successfully authenticated user: {}", username);
             }
+            
+            filterChain.doFilter(request, response);
+            
+        } catch (ExpiredJwtException ex) {
+            log.error("JWT token expired: {}", ex.getMessage());
+            sendErrorResponse(response, "Acesso bloqueado: Token vencido", HttpServletResponse.SC_UNAUTHORIZED);
         } catch (Exception ex) {
-            log.error("Could not set user authentication in security context", ex);
+            log.error("Authentication error: {}", ex.getMessage());
+            sendErrorResponse(response, "Acesso bloqueado: Erro de autenticação", HttpServletResponse.SC_UNAUTHORIZED);
         }
-        
-        filterChain.doFilter(request, response);
-        */
     }
     
     /**
-     * Extract JWT token from Authorization header
+     * Check if the endpoint is public (no authentication required)
+     */
+    private boolean isPublicEndpoint(String requestPath) {
+        return requestPath.startsWith("/api/v1/auth/") ||
+               requestPath.startsWith("/swagger-ui") ||
+               requestPath.startsWith("/v3/api-docs") ||
+               requestPath.startsWith("/actuator/");
+    }
+    
+    /**
+     * Send JSON error response
+     */
+    private void sendErrorResponse(HttpServletResponse response, String message, int status) throws IOException {
+        response.setStatus(status);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("timestamp", LocalDateTime.now().toString());
+        errorDetails.put("status", status);
+        errorDetails.put("error", "Unauthorized");
+        errorDetails.put("message", message);
+        errorDetails.put("path", "");
+        
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(errorDetails));
+    }
+    
+    /**
+     * Extract JWT token from Authorization header or Cookie
      */
     private String extractJwtFromRequest(HttpServletRequest request) {
+        // Try Authorization header first
         String bearerToken = request.getHeader("Authorization");
-        
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
+        }
+        
+        // Try cookie as fallback
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("jwt".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
         }
         
         return null;

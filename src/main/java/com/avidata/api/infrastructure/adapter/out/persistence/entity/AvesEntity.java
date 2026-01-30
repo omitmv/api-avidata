@@ -28,9 +28,8 @@ public class AvesEntity {
   @ManyToOne
   @JoinColumn(name = "especie_id")
   private EspeciesEntity especie;
-  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private SexoEnum sexo = SexoEnum.INDEFINIDO;
+  private String sexo = SexoEnum.INDEFINIDO.getCodigo();
   @Column(name = "data_nascimento")
   private LocalDateTime dataNascimento;
   private String cor;

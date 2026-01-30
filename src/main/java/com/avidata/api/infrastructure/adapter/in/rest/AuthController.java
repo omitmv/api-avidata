@@ -47,6 +47,17 @@ public class AuthController implements AuthSwagger {
 			@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Credenciais de login", required = true) @Valid @RequestBody LoginRequest loginRequest,
 			HttpServletResponse response) {
 		log.info("[INFO] Tentando login para o usuário: {}", loginRequest.getUsername());
+		
+		// Clear any existing JWT cookie first (in case it's expired)
+		ResponseCookie clearCookie = ResponseCookie.from("jwt", "")
+				.httpOnly(true)
+				.secure(true)
+				.sameSite("None")
+				.path("/")
+				.maxAge(0)
+				.build();
+		response.addHeader(HttpHeaders.SET_COOKIE, clearCookie.toString());
+		
 		try {
 			if (loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
 				log.error("[ERRO] Username ou password nulos");
@@ -71,15 +82,13 @@ public class AuthController implements AuthSwagger {
 			UserEntity user = userRepository.findByUsername(authentication.getName())
 					.orElseThrow(() -> new RuntimeException("Usuário não encontrado após autenticação"));
 
+			// Set new JWT cookie
 			ResponseCookie cookie = ResponseCookie.from("jwt", token)
 					.httpOnly(true)
 					.secure(true)
 					.sameSite("None")
 					.path("/")
 					.maxAge(7 * 24 * 60 * 60) // 7 dias
-					// NÃO definir domain, deixando o browser usar o domain da API
-					// OU definir: .domain(".eastus.azurecontainerapps.io") se quiser compartilhar
-					// entre subdomínios
 					.build();
 
 			response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());

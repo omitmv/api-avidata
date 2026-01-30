@@ -1,5 +1,7 @@
 package com.avidata.api.domain.model;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,16 +15,20 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Ave {
   private Long id;
-  private String nome;
-  private String sexo;
-  private Especie especie;
-  private Plantel plantel;
   private String identificador;
+  private String nome;
+  private Especie especie;
+  private String sexo;
+  private LocalDateTime dataNascimento;
+  private String cor;
   private String numeroAnilha;
   private TipoAnilha tipoAnilha;
   private Integer anoAnilha;
-  private StatusAve statusAve;
-  private String cor;
   private Ave pai;
   private Ave mae;
+  private Plantel plantel;
+  private StatusAve statusAve;
+  private LocalDateTime dataEntrada;
+  private LocalDateTime dataSaida;
+  private String observacoes;
 }

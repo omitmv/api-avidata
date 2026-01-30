@@ -20,4 +20,22 @@ public enum SexoEnum {
   public String getDescricao() {
     return descricao;
   }
+
+  public static SexoEnum fromCodigo(String codigo) {
+    for (SexoEnum sexo : SexoEnum.values()) {
+      if (sexo.getCodigo().equalsIgnoreCase(codigo)) {
+        return sexo;
+      }
+    }
+    throw new IllegalArgumentException("Código de sexo inválido: " + codigo);
+  }
+
+  public static SexoEnum fromDescricao(String descricao) {
+    for (SexoEnum sexo : SexoEnum.values()) {
+      if (sexo.getDescricao().equalsIgnoreCase(descricao)) {
+        return sexo;
+      }
+    }
+    throw new IllegalArgumentException("Descrição de sexo inválida: " + descricao);
+  }
 }
