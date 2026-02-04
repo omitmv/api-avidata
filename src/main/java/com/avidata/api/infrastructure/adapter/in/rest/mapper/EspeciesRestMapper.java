@@ -26,6 +26,7 @@ public class EspeciesRestMapper {
         .genero(especie.getGenero())
         .especie(especie.getEspecie())
         .nomePopular(especie.getNomePopular())
+        .linkFoto(especie.getLinkFoto())
         .build();
   }
 }

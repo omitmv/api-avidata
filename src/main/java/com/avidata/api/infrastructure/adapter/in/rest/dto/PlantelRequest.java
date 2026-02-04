@@ -18,4 +18,7 @@ public class PlantelRequest {
   @NotBlank(message = "O campo nome é obrigatório.")
   private String nome;
   private String descricao;
+  private byte[] arquivoLogo;
+  private String linkLogo;
+  private String nomeArquivoLogo;
 }

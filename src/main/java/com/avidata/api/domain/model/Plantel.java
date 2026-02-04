@@ -17,5 +17,8 @@ public class Plantel {
   private Long id;
   private String nome;
   private String descricao;
-  private LocalDateTime dataCadastro; 
+  private LocalDateTime dataCadastro;
+  private byte[] arquivoLogo;
+  private String linkLogo;
+  private String nomeArquivoLogo;
 }

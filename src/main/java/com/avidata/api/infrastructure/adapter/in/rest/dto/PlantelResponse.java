@@ -18,4 +18,6 @@ public class PlantelResponse {
   private String nome;
   private String descricao;
   private LocalDateTime dataCadastro;
+  private String linkLogo;
+  private byte[] arquivoLogo;
 }

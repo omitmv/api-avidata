@@ -18,4 +18,5 @@ public class EspeciesResponse {
   private String genero;
   private String especie;
   private String nomePopular;
+  private String linkFoto;
 }

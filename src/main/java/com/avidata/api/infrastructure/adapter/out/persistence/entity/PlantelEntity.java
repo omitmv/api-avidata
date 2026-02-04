@@ -22,4 +22,6 @@ public class PlantelEntity {
   private String descricao;
   @Column(name = "data_cadastro")
   private LocalDateTime dataCadastro;
+  @Column(name = "link_logo")
+  private String linkLogo;
 }

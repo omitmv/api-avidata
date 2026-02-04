@@ -29,6 +29,7 @@ public class EspeciesPersistenceMapper {
         .genero(especie.getGenero())
         .especie(especie.getEspecie())
         .nomePopular(especie.getNomePopular())
+        .linkFoto(especie.getLinkFoto())
         .build();
   }
 
@@ -50,6 +51,7 @@ public class EspeciesPersistenceMapper {
         .genero(entity.getGenero())
         .especie(entity.getEspecie())
         .nomePopular(entity.getNomePopular())
+        .linkFoto(entity.getLinkFoto())
         .build();
   }
 }

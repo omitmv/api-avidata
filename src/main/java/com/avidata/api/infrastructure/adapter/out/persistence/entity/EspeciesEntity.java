@@ -22,4 +22,6 @@ public class EspeciesEntity {
   private String especie;
   @Column(name = "nome_popular")
   private String nomePopular;
+  @Column(name = "link_foto")
+  private String linkFoto;
 }

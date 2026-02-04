@@ -12,6 +12,9 @@ public class PlantelRestMapper {
     return Plantel.builder()
         .nome(request.getNome())
         .descricao(request.getDescricao())
+        .arquivoLogo(request.getArquivoLogo())
+        .linkLogo(request.getLinkLogo())
+        .nomeArquivoLogo(request.getNomeArquivoLogo())
         .build();
   }
 
@@ -21,6 +24,7 @@ public class PlantelRestMapper {
         .nome(plantel.getNome())
         .descricao(plantel.getDescricao())
         .dataCadastro(plantel.getDataCadastro())
+        .linkLogo(plantel.getLinkLogo())
         .build();
   }
 }

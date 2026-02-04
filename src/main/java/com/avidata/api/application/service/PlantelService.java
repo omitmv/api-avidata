@@ -3,6 +3,7 @@ package com.avidata.api.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,65 +15,94 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Application Service - Plantel Business Logic
- * Implements use cases using domain entities and ports
- */
 @Service
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class PlantelService implements IPlantelUseCase {
-    
-    private final IPlantelRepository plantelRepository;
-    
-    @Override
-    public Plantel criarPlantel(Plantel plantel) {
-        log.info("[DEBUG] Criando plantel: {}", plantel);
-        plantel.setDataCadastro(LocalDateTime.now());
-        return plantelRepository.save(plantel);
-    }
-    
-    @Override
-    public List<Plantel> listarPlantels(String nome) {
-      log.info("[DEBUG] Listando plantels com nome: {}", nome);
-      if (nome != null && !nome.isEmpty()) {
-          return plantelRepository.findByNomeContaining(nome);
-      } else {
-          return plantelRepository.findAll();
+
+  private final IPlantelRepository plantelRepository;
+  private final AzureBlobService azureBlobService;
+
+  @Value("${blob.storage.container-plantel}")
+  private String plantelLogosContainer;
+
+  @Override
+  public Plantel criarPlantel(Plantel plantel) {
+    log.info("[DEBUG] Criando plantel: {}", plantel);
+    if (plantel.getArquivoLogo() != null && plantel.getArquivoLogo().length > 0) {
+      log.info("[DEBUG] Arquivo de logo recebido");
+      try {
+        String linkLogo = azureBlobService.uploadFile(
+            plantelLogosContainer,
+            plantel.getArquivoLogo(),
+            plantel.getNomeArquivoLogo());
+        plantel.setLinkLogo(linkLogo);
+        log.info("[DEBUG] Logo enviado para o Blob Storage. Link: {}", linkLogo);
+      } catch (Exception e) {
+        log.error("[ERROR] Falha ao enviar o logo para o Blob Storage: {}", e.getMessage());
+        throw new RuntimeException("Erro ao enviar o logo para o Blob Storage", e);
       }
     }
+    plantel.setDataCadastro(LocalDateTime.now());
+    return plantelRepository.save(plantel);
+  }
 
-    @Override
-    public Optional<Plantel> obterPlantelPorId(Long id) {
-        log.info("[DEBUG] Buscando plantel por id: {}", id);
-        return plantelRepository.findById(id);
+  @Override
+  public List<Plantel> listarPlantels(String nome) {
+    log.info("[DEBUG] Listando plantels com nome: {}", nome);
+    if (nome != null && !nome.isEmpty()) {
+      return plantelRepository.findByNomeContaining(nome);
+    } else {
+      return plantelRepository.findAll();
     }
+  }
 
-    @Override
-    public Plantel atualizarPlantel(Long id, Plantel plantel) {
-        log.info("[DEBUG] Atualizando plantel com id: {}", id);
-        return plantelRepository.findById(id)
-                .map(plantelExistente -> {
-                    plantelExistente.setNome(plantel.getNome());
-                    plantelExistente.setDescricao(plantel.getDescricao());
-                    return plantelRepository.save(plantelExistente);
-                })
-                .orElseThrow(() -> new RuntimeException("Plantel não encontrado com id: " + id));
-    }
-    
-    @Override
-    public void deletarPlantel(Long id) {
-        log.info("[DEBUG] Deletando plantel com id: {}", id);
-        if (!plantelRepository.existsById(id)) {
-            log.error("[ERROR] Plantel não encontrado com id: {}", id);
-            throw new RuntimeException("Plantel não encontrado com id: " + id);
-        }
-        plantelRepository.deleteById(id);
-    }
+  @Override
+  public Optional<Plantel> obterPlantelPorId(Long id) {
+    log.info("[DEBUG] Buscando plantel por id: {}", id);
+    return plantelRepository.findById(id);
+  }
 
-    @Override
-    public List<Plantel> listarTodosPlantels() {
-        return plantelRepository.findAll();
+  @Override
+  public Plantel atualizarPlantel(Long id, Plantel plantel) {
+    log.info("[DEBUG] Atualizando plantel com id: {}", id);
+    if (plantel.getArquivoLogo() != null && plantel.getArquivoLogo().length > 0) {
+      log.info("[DEBUG] Novo arquivo de logo recebido para atualização");
+      try {
+        String linkLogo = azureBlobService.uploadFile(
+            plantelLogosContainer,
+            plantel.getArquivoLogo(),
+            plantel.getNomeArquivoLogo());
+        plantel.setLinkLogo(linkLogo);
+        log.info("[DEBUG] Novo logo enviado para o Blob Storage. Link: {}", linkLogo);
+      } catch (Exception e) {
+        log.error("[ERROR] Falha ao enviar o novo logo para o Blob Storage: {}", e.getMessage());
+        throw new RuntimeException("Erro ao enviar o novo logo para o Blob Storage", e);
+      }
     }
+    return plantelRepository.findById(id)
+        .map(plantelExistente -> {
+          plantelExistente.setNome(plantel.getNome());
+          plantelExistente.setDescricao(plantel.getDescricao());
+          plantelExistente.setLinkLogo(plantel.getLinkLogo());
+          return plantelRepository.save(plantelExistente);
+        })
+        .orElseThrow(() -> new RuntimeException("Plantel não encontrado com id: " + id));
+  }
+
+  @Override
+  public void deletarPlantel(Long id) {
+    log.info("[DEBUG] Deletando plantel com id: {}", id);
+    if (!plantelRepository.existsById(id)) {
+      log.error("[ERROR] Plantel não encontrado com id: {}", id);
+      throw new RuntimeException("Plantel não encontrado com id: " + id);
+    }
+    plantelRepository.deleteById(id);
+  }
+
+  @Override
+  public List<Plantel> listarTodosPlantels() {
+    return plantelRepository.findAll();
+  }
 }

@@ -27,6 +27,7 @@ public class PlantelPersistenceMapper {
         .nome(plantel.getNome())
         .descricao(plantel.getDescricao())
         .dataCadastro(plantel.getDataCadastro())
+        .linkLogo(plantel.getLinkLogo())
         .build();
   }
 
@@ -46,6 +47,7 @@ public class PlantelPersistenceMapper {
         .nome(entity.getNome())
         .descricao(entity.getDescricao())
         .dataCadastro(entity.getDataCadastro())
+        .linkLogo(entity.getLinkLogo())
         .build();
   }
 }
